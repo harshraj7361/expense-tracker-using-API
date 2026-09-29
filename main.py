@@ -85,5 +85,18 @@ def update_expense(id:int,ExpenseTracker:ExpenseTracker):
 
     return expense_data
 
+@app.delete("/expenses/{id}")
+def delete_expense(id:int):
+
+    data=load_data()
+    if str(id) not in data:
+        raise HTTPException(status_code=404,detail="expense not found")
+
+    del data[str(id)]
+
+    save_data(data)
+
+    return {"message": "Expense deleted successfully"}
+
 
 
