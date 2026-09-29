@@ -68,7 +68,22 @@ def get_expense(id:int):
         return data[str(id)]
 
 
+@app.put("/expenses/{id}")
+def update_expense(id:int,ExpenseTracker:ExpenseTracker):
+    data = load_data()
 
+    if str(id) not in data:
+        raise HTTPException(status_code=404,detail="expense not found")
+
+    expense_data = ExpenseTracker.model_dump()
+
+    expense_data["id"] = id
+
+    data[str(id)] = expense_data
+
+    save_data(data)
+
+    return expense_data
 
 
 
