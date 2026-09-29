@@ -1,4 +1,4 @@
-from fastapi import FastAPI,Path,Query
+from fastapi import FastAPI,Path,Query,HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel,Field
 from typing import Annotated,Literal
@@ -50,7 +50,22 @@ def create_expense(ExpenseTracker:ExpenseTracker):
 
     return expense_data
 
+@app.get("/expenses")
+def get_expenses():
+    data= load_data()
 
+    return data 
+
+
+@app.get("/expenses/{id}")
+def get_expense(id:int):
+
+    data= load_data()
+
+    if  str(id) not in data:
+        raise HTTPException(status_code=404,detail="Expense id not found")
+    else:
+        return data[str(id)]
 
 
 
