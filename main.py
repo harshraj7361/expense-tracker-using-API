@@ -68,7 +68,36 @@ def search_expenses(title:str):
         if title.lower() in expense["title"].lower():
             results.append(expense)
 
+        if not results:
+            raise HTTPException(status_code=404,detail="no expense found with this title")
+
     return results
+
+@app.get("/expenses/summary")
+def expense_summary():
+    data = load_data()
+    if not data:
+        raise HTTPException(
+            status_code=404,
+            detail="No expenses found"
+        )
+
+    amounts = []
+
+    for expense in data.values():
+        amounts.append(expense["amount"])
+
+    total = sum(amounts)
+    average = total / len(amounts)
+    highest = max(amounts)
+    lowest = min(amounts)
+
+    return {
+        "total": total,
+        "average": average,
+        "highest": highest,
+        "lowest": lowest
+    }
 
 
 @app.get("/expenses/{id}")
