@@ -28,7 +28,7 @@ def save_data(data):
 
 @app.get("/")
 def home():
- return {"message : api is running"} 
+    return {"message : api is running"} 
 
 @app.post("/create")
 def create_expense(ExpenseTracker:ExpenseTracker):
@@ -55,6 +55,20 @@ def get_expenses():
     data= load_data()
 
     return data 
+
+@app.get("/expenses/search")
+def search_expenses(title:str):
+
+    data =load_data()
+
+    results=[]
+
+    for expense in data.values():
+
+        if title.lower() in expense["title"].lower():
+            results.append(expense)
+
+    return results
 
 
 @app.get("/expenses/{id}")
@@ -85,6 +99,7 @@ def update_expense(id:int,ExpenseTracker:ExpenseTracker):
 
     return expense_data
 
+
 @app.delete("/expenses/{id}")
 def delete_expense(id:int):
 
@@ -97,6 +112,4 @@ def delete_expense(id:int):
     save_data(data)
 
     return {"message": "Expense deleted successfully"}
-
-
 
