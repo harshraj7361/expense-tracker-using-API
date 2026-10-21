@@ -28,7 +28,15 @@ def save_data(data):
 
 @app.get("/")
 def home():
-    return {"message : api is running"} 
+    return {"message : api is running"}
+
+@app.get("/api/health")
+async def health_check():
+    return {
+        "status": "online",
+        "message": "Expense API is running smoothly.",
+        "version": "2.0.0"
+    }
 
 @app.post("/create")
 def create_expense(ExpenseTracker:ExpenseTracker):
